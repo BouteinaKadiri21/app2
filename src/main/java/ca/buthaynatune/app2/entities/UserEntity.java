@@ -1,16 +1,29 @@
-package ca.buthaynatune.app2.shared.dto;
+package ca.buthaynatune.app2.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
-
-public class UserDto implements Serializable {
-    private static final long serialVersionUID=1l;
+@Entity(name="users")
+public class UserEntity implements Serializable {
+    private static  final long serialVersionUID = 2l;
+    @Id
+    @GeneratedValue
     private long id;
     private String userId ;
+    @Column(nullable = false, length = 50)
     private String firstName ;
+    @Column(nullable = false, length = 50)
     private String lastName ;
+    @Column(nullable = false, length = 123)
+
     private String email ;
+    @Column(nullable = false)
     private String encryptedPassword ;
+    @Column(nullable = false)
     private String emailVerificationToken ;
+    @Column(columnDefinition = "boolean default false")
     private Boolean emailVerificationStatus ;
 
     public long getId() {
@@ -77,4 +90,3 @@ public class UserDto implements Serializable {
         this.emailVerificationStatus = emailVerificationStatus;
     }
 }
-

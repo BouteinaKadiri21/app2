@@ -3,7 +3,7 @@ package ca.buthaynatune.app2.shared.dto;
 import java.io.Serializable;
 
 public class UserDto implements Serializable {
-    
+    private static final long serialVersionUID=1l;
     private long id;
     private String userId ;
     private String firstName ;

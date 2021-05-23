@@ -8,14 +8,11 @@ import java.io.Serializable;
 @Entity(name="users")
 public class UserEntity implements Serializable {
     private static final long serialVersionUID = -5763827745308343856L;
-
     @Id
     @GeneratedValue
     private long id;
-
     @Column(nullable=false)
     private String userId;
-
     public long getId() {
         return id;
     }
@@ -65,7 +62,14 @@ public class UserEntity implements Serializable {
     @Column(nullable=false, length=120, unique=true)
     private String email;
 
+    @Column(nullable=false)
+    private String encryptedPassword;
 
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
 
-
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
 }

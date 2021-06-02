@@ -1,10 +1,14 @@
 package ca.buthaynatune.app2.security;
 
+import ca.buthaynatune.app2.SpringApplicationContext;
 import ca.buthaynatune.app2.requests.UserLoginRequest;
 
+import ca.buthaynatune.app2.services.UserService;
+import ca.buthaynatune.app2.shared.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
 
     private final AuthenticationManager authenticationManager;
 
@@ -42,6 +47,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             throw new RuntimeException(e);
         }
     }
+
+
     @Override
     protected void successfulAuthentication(HttpServletRequest req,
                                             HttpServletResponse res,
@@ -50,17 +57,22 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String userName = ((User) auth.getPrincipal()).getUsername();
 
+        UserService userService = (UserService)SpringApplicationContext.getBean("userSeviceImpl");
+
+        UserDto userDto = userService.getUser(userName);
 
         String token = Jwts.builder()
                 .setSubject(userName)
-
-               .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-               .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
-               .compact();
+                //.claim("id", userDto.getUserId())
+                //.claim("name", userDto.getFirstName() + " " + userDto.getLastName())
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
+                .compact();
 
 
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        //res.addHeader("user_id", userDto.getUserId());
 
 
 
